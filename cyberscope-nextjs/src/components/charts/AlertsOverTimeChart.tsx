@@ -6,13 +6,20 @@ import ChartContainer from './ChartContainer';
 import TimeRangeFilter from '../TimeRangeFilter';
 import { generateAlertsOverTime, TimeRange } from '@/utils/dataGenerators';
 
+import { AlertTimeData } from '@/data/l1ChartData';
+
 interface AlertsOverTimeChartProps {
   showTimeFilter?: boolean;
+  data?: AlertTimeData[];
+  view?: string;
 }
 
-export default function AlertsOverTimeChart({ showTimeFilter = true }: AlertsOverTimeChartProps) {
+export default function AlertsOverTimeChart({ showTimeFilter = true, data }: AlertsOverTimeChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>('24h');
-  const chartData = generateAlertsOverTime(timeRange);
+
+  const chartData = data
+    ? data.map(d => ({ label: d.time, value: d.alerts, timestamp: d.time }))
+    : generateAlertsOverTime(timeRange);
 
   return (
     <ChartContainer
