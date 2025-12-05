@@ -2,13 +2,15 @@
 
 import React from 'react';
 import { useAuth, UserRole } from '@/context/AuthContext';
+import { useUser } from '@/context/UserContext';
 import { Shield, ChevronDown } from 'lucide-react';
 
 export default function RoleSwitcher() {
-    const { role, switchRole } = useAuth();
+    const { role } = useAuth();
+    const { allUsers, switchUser } = useUser();
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const roles: UserRole[] = ['SOC Lead', 'L1 Analyst', 'L2 Analyst', 'L3 Analyst'];
+    const roles: UserRole[] = ['SOC Lead', 'SOC L1', 'SOC L2', 'SOC L3'];
 
     return (
         <div style={{ position: 'relative' }}>
@@ -52,7 +54,10 @@ export default function RoleSwitcher() {
                         <button
                             key={r}
                             onClick={() => {
-                                switchRole(r);
+                                const userWithRole = allUsers.find(u => u.role === r);
+                                if (userWithRole) {
+                                    switchUser(userWithRole.id);
+                                }
                                 setIsOpen(false);
                             }}
                             style={{
