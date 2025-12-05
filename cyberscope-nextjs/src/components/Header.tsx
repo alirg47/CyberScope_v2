@@ -5,8 +5,20 @@ import { Bell } from 'lucide-react';
 import RoleSwitcher from './RoleSwitcher';
 import { useAuth } from '@/context/AuthContext';
 
+// Local type for Header component to support name/email properties
+type HeaderUser = {
+    name?: string | null;
+    email?: string | null;
+};
+
 export default function Header() {
-    const { user } = useAuth();
+    const { user: authUser } = useAuth();
+
+    // Map User type to HeaderUser type for component usage
+    const user: HeaderUser = {
+        name: authUser?.fullName,
+        email: authUser?.email
+    };
 
     return (
         <header style={{
@@ -69,7 +81,7 @@ export default function Header() {
                         color: '#fff',
                         border: '2px solid rgba(255,255,255,0.1)'
                     }}>
-                        {user?.name.charAt(0)}
+                        {user?.name?.charAt(0)}
                     </div>
                 </div>
             </div>
